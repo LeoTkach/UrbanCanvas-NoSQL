@@ -23,5 +23,17 @@ async function main() {
     await artworks.updateMany({}, { $set: { lastCheckedAt: new Date() } });
     console.log("Query 5: Delete with condition");
     await reviews.deleteMany({ rating: { $lt: 2 } });
+    console.log("Query 6: Complex Aggregation (Lookup & Project)");
+    const routeDetails = await routes.aggregate([
+      { $lookup: { from: "artworks", localField: "artworks", foreignField: "_id", as: "artwork_details" } },
+      { $project: { name: 1, difficulty: 1, "artwork_details.title": 1, "artwork_details.style": 1 } }
+    ]).toArray();
+
+    console.log("Query 7: Complex Aggregation (Lookup, Unwind, Group, AddToSet)");
+    const artistStats = await artworks.aggregate([
+      { $lookup: { from: "artists", localField: "artistId", foreignField: "_id", as: "artist" } },
+      { $unwind: "$artist" },
+      { $group: { _id: "$artist.name", totalArtworks: { $sum: 1 }, styles: { $addToSet: "$style" } } }
+    ]).toArray();
   } catch(e) {} finally { await client.close(); } }
 main();
