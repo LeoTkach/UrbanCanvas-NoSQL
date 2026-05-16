@@ -11,5 +11,8 @@ async function main() {
       await db.collection(col).deleteMany({});
     }
     console.log('Collections initialized.');
+    await db.collection('artworks').createIndex({ "location": "2dsphere" });
+    await db.collection('routes').createIndex({ "path": "2dsphere" });
+    await db.collection('artworks').createIndex({ "style": 1 });
   } catch(e) {} finally { await client.close(); } }
 main();
