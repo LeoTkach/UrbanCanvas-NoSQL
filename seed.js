@@ -14,5 +14,18 @@ async function main() {
     await db.collection('artworks').createIndex({ "location": "2dsphere" });
     await db.collection('routes').createIndex({ "path": "2dsphere" });
     await db.collection('artworks').createIndex({ "style": 1 });
+    const resultUsers = await db.collection('users').insertMany([
+      { username: "art_lover99", email: "lover@mail.com", role: "tourist", joinedAt: new Date() },
+      { username: "kyiv_guide", email: "guide@mail.com", role: "guide", joinedAt: new Date() },
+      { username: "admin_moderator", email: "admin@mail.com", role: "admin", joinedAt: new Date() }
+    ]);
+    const userIds = Object.values(resultUsers.insertedIds);
+
+    const resultArtists = await db.collection('artists').insertMany([
+      { name: "Banksy", country: "UK", style: "Stencil", bio: "Anonymous England-based street artist." },
+      { name: "Interesni Kazki", country: "Ukraine", style: "Surrealism", bio: "Ukrainian duo famous for bright murals." },
+      { name: "Shum", country: "Ukraine", style: "Graffiti", bio: "Local graffiti legend." }
+    ]);
+    const artistIds = Object.values(resultArtists.insertedIds);
   } catch(e) {} finally { await client.close(); } }
 main();
