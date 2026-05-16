@@ -13,21 +13,31 @@ async function main() {
 
     console.log("Query 1: Single condition filter");
     const paidEvents = await events.find({ price: { $gt: 0 } }).toArray();
-    
+    console.log(paidEvents);
+    console.log("------------------------");
     console.log("Query 2: Multi-condition filter");
     const selectedArtworks = await artworks.find({ style: { $in: ["Surrealism", "Stencil"] } }).toArray();
+    console.log(selectedArtworks);
+    console.log("------------------------");
     console.log("Query 3: Update with condition");
-    await artworks.updateOne({ title: "Київський каштан" }, { $set: { status: "Restored", year: 2024 } });
-    
+    const updateRes = await artworks.updateOne({ title: "Київський каштан" }, { $set: { status: "Restored", year: 2024 } });
+    console.log(`Оновлено документів: ${updateRes.modifiedCount}`);
+    console.log("------------------------");
     console.log("Query 4: Update without condition (update all)");
-    await artworks.updateMany({}, { $set: { lastCheckedAt: new Date() } });
+    const updateAllRes = await artworks.updateMany({}, { $set: { lastCheckedAt: new Date() } });
+    console.log(`Оновлено документів: ${updateAllRes.modifiedCount}`);
+    console.log("------------------------");
     console.log("Query 5: Delete with condition");
-    await reviews.deleteMany({ rating: { $lt: 2 } });
+    const delRes = await reviews.deleteMany({ rating: { $lt: 2 } });
+    console.log(`Видалено документів: ${delRes.deletedCount}`);
+    console.log("------------------------");
     console.log("Query 6: Complex Aggregation (Lookup & Project)");
     const routeDetails = await routes.aggregate([
       { $lookup: { from: "artworks", localField: "artworks", foreignField: "_id", as: "artwork_details" } },
       { $project: { name: 1, difficulty: 1, "artwork_details.title": 1, "artwork_details.style": 1 } }
     ]).toArray();
+    console.log(JSON.stringify(routeDetails, null, 2));
+    console.log("------------------------");
 
     console.log("Query 7: Complex Aggregation (Lookup, Unwind, Group, AddToSet)");
     const artistStats = await artworks.aggregate([
@@ -35,5 +45,7 @@ async function main() {
       { $unwind: "$artist" },
       { $group: { _id: "$artist.name", totalArtworks: { $sum: 1 }, styles: { $addToSet: "$style" } } }
     ]).toArray();
-  } catch(e) {} finally { await client.close(); } }
+    console.log(artistStats);
+    console.log("------------------------");
+  } catch(e) { console.error(e); } finally { await client.close(); } }
 main();
