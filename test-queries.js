@@ -21,5 +21,7 @@ async function main() {
     
     console.log("Query 4: Update without condition (update all)");
     await artworks.updateMany({}, { $set: { lastCheckedAt: new Date() } });
+    console.log("Query 5: Delete with condition");
+    await reviews.deleteMany({ rating: { $lt: 2 } });
   } catch(e) {} finally { await client.close(); } }
 main();
