@@ -40,3 +40,10 @@ To verify the operation of complex aggregations (including `$lookup`, `$unwind`,
 ```bash
 docker exec urbancanvas-app node test-queries.js
 ```
+
+### 4. Open the Client Application (Lab 3-5)
+The Next.js frontend is fully containerized and runs on port `3010`.
+Simply open your browser to:
+[http://localhost:3010](http://localhost:3010)
+
+*Note: The frontend retrieves geospatial and aggregation data automatically from the MongoDB container via an internal API.*
