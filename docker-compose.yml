@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:latest
@@ -18,10 +16,25 @@ services:
     depends_on:
       - mongodb
     environment:
-      # Вказуємо контейнеру підключатися до БД по імені сервісу 'mongodb', а не 'localhost'
       MONGO_URL: mongodb://admin:secretpassword@mongodb:27017
-    # Контейнер просто висітиме у фоні, щоб ми могли заходити в нього і запускати скрипти
     command: tail -f /dev/null
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build: ./urbancanvas
+    container_name: urbancanvas-frontend
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URL: mongodb://admin:secretpassword@mongodb:27017
+    ports:
+      - "3010:3010"
+    volumes:
+      - ./urbancanvas:/app
+      - /app/node_modules
 
 volumes:
   mongodb_data:
+
