@@ -1,4 +1,4 @@
-# 🎨 UrbanCanvas
+# UrbanCanvas
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
@@ -10,23 +10,23 @@
 
 ---
 
-## 🗺️ ER Diagram & Database Architecture
+## ER Diagram & Database Architecture
 
 At the core of UrbanCanvas is a highly optimized NoSQL data model powered by **MongoDB**. The architecture employs 8 interconnected collections, leveraging references, `$jsonSchema` validation, and complex `$lookup` aggregations to build relationships.
 
 ![UrbanCanvas Database ER Diagram](./Diagram.png)
 
 ### Core Collections:
-- 🧑‍🎨 **`artists`** — Biographies, styles, and origins of street artists.
-- 🖼️ **`artworks`** — The central entity containing rich details, tags, and **GeoJSON** points for mapping.
-- 📍 **`routes`** — Curated city walking tours constructed with GeoJSON `LineString` paths.
-- 👤 **`users`** — System actors (Tourists, Guides, System Admins).
-- ⭐ **`reviews`** & 📖 **`stories`** — User-generated content and lore tied to specific artworks.
-- 🎟️ **`events`** & 🚩 **`reports`** — Guided tours and moderation reports (e.g., vandalism tracking).
+- **`artists`** — Biographies, styles, and origins of street artists.
+- **`artworks`** — The central entity containing rich details, tags, and **GeoJSON** points for mapping.
+- **`routes`** — Curated city walking tours constructed with GeoJSON `LineString` paths.
+- **`users`** — System actors (Tourists, Guides, System Admins).
+- **`reviews`** & **`stories`** — User-generated content and lore tied to specific artworks.
+- **`events`** & **`reports`** — Guided tours and moderation reports (e.g., vandalism tracking).
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 - **Geospatial Mapping:** Utilizes MongoDB's `2dsphere` indexes and Leaflet.js to render interactive dark-mode maps.
 - **Complex Aggregations:** Uses deep pipelines (`$lookup`, `$unwind`, `$group`, `$addFields`) to calculate artist statistics and fetch relational graph data in a single query.
@@ -36,7 +36,7 @@ At the core of UrbanCanvas is a highly optimized NoSQL data model powered by **M
 
 ---
 
-## 🛠️ Quick Start (Docker)
+## Quick Start (Docker)
 
 No local Node.js or MongoDB installation is required. Everything runs via Docker Compose.
 
