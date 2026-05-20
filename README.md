@@ -1,49 +1,67 @@
-# UrbanCanvas 🎨
+# 🎨 UrbanCanvas
 
-**UrbanCanvas** is an information system for tracking, reviewing, and creating curated routes for street art objects (murals, graffiti, installations). The project was created as part of the "NoSQL Systems" university course laboratory works.
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-## 🚀 Technology Stack
-- **Database:** MongoDB (Document-oriented NoSQL DBMS)
-- **Infrastructure:** Docker and Docker Compose
-- **Backend (DB Scripts):** Node.js + official `mongodb` driver
-- **Frontend (In Development):** Next.js (React), TailwindCSS, Leaflet (for geospatial data)
+**UrbanCanvas** is a comprehensive information system and web application for tracking, reviewing, and mapping street art (murals, graffiti, and installations). The project was engineered as part of a NoSQL architecture university course.
 
-## 📁 Project Structure
-The project uses 7 interconnected MongoDB collections to implement complex domain logic:
-- `users` — system users (tourists, guides, admins).
-- `artists` — street artists and muralists.
-- `artworks` — street art objects (includes GeoJSON coordinates).
-- `reviews` — user reviews and ratings.
-- `events` — guided tours and street art events.
-- `routes` — curated walking routes (GeoJSON LineString).
-- `reports` — moderation reports (e.g., vandalism, faded paint).
+---
 
-## 🛠 Setup Instructions (Docker Only)
+## 🗺️ ER Diagram & Database Architecture
 
-We use a fully containerized approach. No local Node.js or `node_modules` are required on your host machine.
+At the core of UrbanCanvas is a highly optimized NoSQL data model powered by **MongoDB**. The architecture employs 8 interconnected collections, leveraging references, `$jsonSchema` validation, and complex `$lookup` aggregations to build relationships.
 
-### 1. Start the Environment
-Start both the MongoDB database and the Node.js application container in the background:
+![UrbanCanvas Database ER Diagram](./Diagram.png)
+
+### Core Collections:
+- 🧑‍🎨 **`artists`** — Biographies, styles, and origins of street artists.
+- 🖼️ **`artworks`** — The central entity containing rich details, tags, and **GeoJSON** points for mapping.
+- 📍 **`routes`** — Curated city walking tours constructed with GeoJSON `LineString` paths.
+- 👤 **`users`** — System actors (Tourists, Guides, System Admins).
+- ⭐ **`reviews`** & 📖 **`stories`** — User-generated content and lore tied to specific artworks.
+- 🎟️ **`events`** & 🚩 **`reports`** — Guided tours and moderation reports (e.g., vandalism tracking).
+
+---
+
+## ✨ Key Features
+
+- **Geospatial Mapping:** Utilizes MongoDB's `2dsphere` indexes and Leaflet.js to render interactive dark-mode maps.
+- **Complex Aggregations:** Uses deep pipelines (`$lookup`, `$unwind`, `$group`, `$addFields`) to calculate artist statistics and fetch relational graph data in a single query.
+- **Strict Data Integrity:** Enforces schema rules directly at the DB level using BSON `$jsonSchema` validators.
+- **Fully Containerized:** Zero local dependencies. The entire stack (DB + Next.js App) runs in isolated Docker containers.
+- **Admin Control Room:** A dedicated Next.js graphical interface for full CRUD management.
+
+---
+
+## 🛠️ Quick Start (Docker)
+
+No local Node.js or MongoDB installation is required. Everything runs via Docker Compose.
+
+### 1. Launch the Stack
+Fire up the MongoDB engine and the Next.js frontend in detached mode:
 ```bash
 docker-compose up --build -d
 ```
-*(This will automatically install all dependencies inside the `urbancanvas-app` container).*
 
-### 2. Initialize and Seed the Database (Lab 1)
-Run the seed script inside the Docker container to create collections, add geo-indexes (`2dsphere`), and populate the database with test data:
+### 2. Seed the Database
+Populate the database with collections, `$jsonSchema` validators, `2dsphere` indexes, and realistic initial data:
 ```bash
 docker exec urbancanvas-app node seed.js
 ```
 
-### 3. Execute Test Queries (Lab 2)
-To verify the operation of complex aggregations (including `$lookup`, `$unwind`, `$group`), advanced filtering, and CRUD operations, run this command inside the container:
+### 3. Run Aggregation Tests
+Execute advanced MongoDB queries (filtering, bulk updates, multi-stage lookups) via the CLI:
 ```bash
 docker exec urbancanvas-app node test-queries.js
 ```
 
-### 4. Open the Client Application (Lab 3-5)
-The Next.js frontend is fully containerized and runs on port `3010`.
-Simply open your browser to:
-[http://localhost:3010](http://localhost:3010)
+### 4. Explore the Web App
+The Next.js client is now served and hot-reloading on port `3010`. Open your browser to explore the map and admin panel:
 
-*Note: The frontend retrieves geospatial and aggregation data automatically from the MongoDB container via an internal API.*
+👉 **[http://localhost:3010](http://localhost:3010)**
+
+---
+*Built with ❤️ for the love of urban culture.*
